@@ -12,18 +12,19 @@ def print_matrix(state):
         counter = counter +1
         print("\n-------------")
 
-fname = 'nodePath.txt'
-data = np.loadtxt(fname)
-if len(data[1]) is not 9:
-    print("Format of the text file is incorrect, retry ")
-else:
-    for i in range(0, len(data)):
-        if i == 0:
-            print("Start Node")
-        elif i == len(data)-1:
-            print("Achieved Goal Node")
-        else:
-            print("Step ",i)
-        print_matrix(data[i])
-        print()
-        print()
+def plot_path():
+    fname = 'nodePath.txt'
+    data = np.loadtxt(fname)
+    if len(data[1]) != 9:
+        print("Format of the text file is incorrect, retry ")
+    else:
+        for i in range(0, len(data)):
+            if i == 0:
+                print("Start Node")
+            elif i == len(data)-1:
+                print("Achieved Goal Node")
+            else:
+                print("Step ",i)
+            print_matrix(data[i])
+            print()
+            print()
