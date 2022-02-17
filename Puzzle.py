@@ -339,15 +339,20 @@ def Initialize_puzzle():
         Goal state.
 
     """
-    print("\n *************************** \n")
-    print(" Welcome to 8 Puzzle Solver")
-    print("\n *************************** \n")
-    print(" This solver considers inputs to be: \n Nine unique non-negative integers in domain: [0,8] \n")
-    print(" Please enter the start state for the puzzle in the format provided below \n")
-    print(" For a state like: \n")
+    print("""
+           ____              _______  _____  _____  ________  ________  _____     ________  
+         .' __ '.           |_   __ \|_   _||_   _||  __   _||  __   _||_   _|   |_   __  | 
+         | (__) |   ______    | |__) | | |    | |  |_/  / /  |_/  / /    | |       | |_ \_| 
+         .`____'.  |______|   |  ___/  | '    ' |     .'.' _    .'.' _   | |   _   |  _| _  
+        | (____) |           _| |_      \ \__/ /    _/ /__/ | _/ /__/ | _| |__/ | _| |__/ | 
+        `.______.'          |_____|      `.__.'    |________||________||________||________| 
+                                                                                            
+     """)
+    print(" This solver considers inputs to be nine unique non-negative integers in domain: [0,8] \n sample state is shown below: \n")
     sample = [1,4,7,2,5,8,3,6,0]
     print_matrix(sample)
-    print("\n please enter: 1 4 7 2 5 8 3 6 0")     
+    print("\n In order to provide a user-defined state the user needs to enter the numbers of the state in a column-wise fashion.\n Example: For the above sample state, the input should be: 1 4 7 2 5 8 3 6 0\n")
+    print("---------------------------------------")     
     start_node = getInitialState()
     goal_node = getGoalState()
         
@@ -362,7 +367,7 @@ def Solve(start_node, goal_node):
     ----------
     start_node : list
         Start state.
-    goal_node : TYPE
+    goal_node : list
         Goal state.
 
     Returns
@@ -372,11 +377,8 @@ def Solve(start_node, goal_node):
     """
     [success, nodes] = BFS(start_node,goal_node)
     if not success:
-        print(" The puzzle could not be solved for the provided states, shown below: \n")
-        print(" Start State:\n")
-        print_matrix(start_node)
-        print(" Goal State:\n")
-        print_matrix(goal_node)
+        print(" The puzzle could not be solved for the provided states. \n")
+
     else:
         nodePath = open("nodePath.txt","w+")
         Nodes = open("Nodes.txt","w+")
