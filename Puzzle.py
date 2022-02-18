@@ -9,38 +9,65 @@ Project 1
 UID: 117551693
 
 """
+# ---------------------------------------------------------------------------------
+# IMPORTING PACKAGES
+# ---------------------------------------------------------------------------------
 
 from collections import deque
 from plot_path import *
 import numpy as np
 
+# ---------------------------------------------------------------------------------
+# FUNCTION DEFINITIONS
+# ---------------------------------------------------------------------------------
+
+
 def getInitialState():
-    flag = False
-    while not flag:
+    """
+    Takes in the user defined start state.
+
+    Returns
+    -------
+    state : list
+        Start state.
+
+    """
+    flag = False                                                                        # Flag to check if the provided state is valid.
+    while not flag:                                                                     # Looping until a valid state is entered.
         state = [int(item) for item in input("Enter the initial state: ").split()]
+        # Given state is sorted in ascending order and checked against the valid state list. 
         temp = state.copy()
-        valid = [0,1,2,3,4,5,6,7,8]
+        valid = [0,1,2,3,4,5,6,7,8]                                                     
         temp.sort()
-        if (temp == valid):
+        if (temp == valid):                                                             # Breaks the loop if state is valid.
             flag = True
         else:
-            print("\n Enter a valid state! \n")
-        
+            print("\n Enter a valid state! \n")      
     return state
+
 
 def getGoalState():
-    flag = False
-    while not flag:
+    """
+    Takes in the user defined goal state.
+
+    Returns
+    -------
+    state : list
+        Goal state.
+
+    """
+    flag = False                                                                        # Flag to check if the provided state is valid.
+    while not flag:                                                                     # Looping until a valid state is entered.
         state = [int(item) for item in input("Enter the goal state: ").split()]
+        # Given state is sorted in ascending order and checked against the valid state list.
         temp = state.copy()
         valid = [0,1,2,3,4,5,6,7,8]
         temp.sort()
-        if (temp == valid):
+        if (temp == valid):                                                             # Breaks the loop if state is valid.
             flag = True
         else:
             print("\n Enter a valid state! \n")
     return state
-
 
 
 def BlankTileLocation(node):
@@ -63,6 +90,7 @@ def BlankTileLocation(node):
     j = (index // 3)
     return [i,j]
 
+
 def ActionMoveUp(node):
     """
     Swaps the blank tile with the adjacent tile in the up direction  
@@ -82,16 +110,19 @@ def ActionMoveUp(node):
 
     [i,j] = BlankTileLocation(node)
     new_node = node.copy()
-    if i == 0:
+    if i == 0:                                                                          # Move not valid if zero tile in the top row.             
         status = False
     else:
         status = True
-        zero_index = (3 * j) + i
+        # Position of the zero tile and the tile above are found according to the list. 
+        zero_index = (3 * j) + i                    
         up_index = (3 * j) + (i - 1)
-        up_element = node[up_index]
+        up_tile = node[up_index]
+        # Swapping tiles
         new_node[up_index] = 0
-        new_node[zero_index] = up_element
+        new_node[zero_index] = up_tile
     return [status,new_node]
+
 
 def ActionMoveRight(node):
     """
@@ -112,13 +143,15 @@ def ActionMoveRight(node):
 
     [i,j] = BlankTileLocation(node)
     new_node = node.copy()
-    if j == 2:
+    if j == 2:                                                                          # Move not valid if zero tile in the rightmost column.
         status = False
     else:
         status = True
+        # Position of the zero tile and the tile on right are found according to the list.
         zero_index = (3 * j) + i
         right_index = (3 * (j + 1)) + i
         right_element = node[right_index]
+        # Swapping tiles
         new_node[right_index] = 0
         new_node[zero_index] = right_element
     return [status,new_node]
@@ -142,13 +175,15 @@ def ActionMoveDown(node):
 
     [i,j] = BlankTileLocation(node)
     new_node = node.copy()
-    if i == 2:
+    if i == 2:                                                                          # Move not valid if zero tile in the bottom row.
         status = False
     else:
         status = True
+        # Position of the zero tile and the tile below are found according to the list.
         zero_index = (3 * j) + i
         down_index = (3 * j) + (i + 1)
         down_element = node[down_index]
+        # Swapping tiles
         new_node[down_index] = 0
         new_node[zero_index] = down_element
     return [status,new_node]
@@ -172,16 +207,19 @@ def ActionMoveLeft(node):
 
     [i,j] = BlankTileLocation(node)
     new_node = node.copy()
-    if j == 0:
+    if j == 0:                                                                          # Move not valid if zero tile in the leftmost column.
         status = False
     else:
         status = True
+        # Position of the zero tile and the tile on left are found according to the list.
         zero_ind = (3 * j) + i
         left_ind = (3 * (j - 1)) + i
         left_element = node[left_ind]
+        # Swapping tiles
         new_node[left_ind] = 0
         new_node[zero_ind] = left_element
     return [status,new_node]
+
 
 def AddNode(new_node,nodes,node_set):
     """
@@ -203,7 +241,7 @@ def AddNode(new_node,nodes,node_set):
 
     """
     visited = False
-    if tuple(new_node[0:9]) in node_set:
+    if tuple(new_node[0:9]) in node_set:                                                # Checks if node has alreadyvbeen visited. 
         visited = True
     else:
         nodes.append(new_node)
@@ -227,8 +265,8 @@ def generate_path(nodes):
 
     """
     
-    parent = nodes[-1][9]
-    path_nodes = [parent]
+    parent = nodes[-1][9]                                                               # Last node is taken as the parent node
+    path_nodes = [parent]                                                           
     while parent != -1:
         parent_node = nodes[path_nodes[-1]]
         parent = parent_node[9]
@@ -260,16 +298,17 @@ def check_neighbors(cur_node,direction):
         Validity of move and new node in given direction.
 
     """
-    if direction == 'up':
+    if direction == 'Up':
         [status,new_node] = ActionMoveUp(cur_node)
-    if direction == 'right':
+    if direction == 'Right':
         [status,new_node] = ActionMoveLeft(cur_node)
-    if direction == 'down':
+    if direction == 'Down':
         [status,new_node] = ActionMoveDown(cur_node)
-    if direction == 'left':
+    if direction == 'Left':
         [status,new_node] = ActionMoveRight(cur_node)
     
     return [status,new_node]
+
 
 def BFS(start_node,goal_node):
     """
@@ -289,42 +328,39 @@ def BFS(start_node,goal_node):
 
     """
     
-    nodes = [[]]
+    nodes = [[]]                                                                        # List of nodes
+    node_set = {tuple(start_node)}                                                      # Set created so as to remove the possibility of duplicate nodes and for faster search operation.
 
-    
-    node_set = {tuple(start_node)}
-
-    start_node.append(-1) #set start node to have parent of -1
+    start_node.append(-1)                                                               # Start node is appended with parent id of -1.
     nodes[0] = start_node
 
-
     queue = deque()
-    queue.append(0) #set the start_node as the first node in the queue
+    queue.append(0)                                                                     # Set the start_node as the first node in the queue
 
-    isgoal = False
-    success = False
+    isgoal = False                                                                      # Bool to check if goal is reached
+    success = False                                                                     # Bool to check success of search
 
-    neighbors = ['left','up','right','down'] #modify order to change the order of search
+    neighbors = ['Up', 'Right', 'Down', 'Left']                                         # Order of search, can be modified accodingly.
+   
     while queue:
-        # Set the current node as the top of the queue and remove it
-        parent = queue.popleft();
-        cur_node = nodes[parent]
-        for direction in neighbors:
+        parent = queue.popleft();                                                       # Set the current node as the top of the queue and remove it
+        cur_node = nodes[parent]                                                        # Current node
+        for direction in neighbors:                                                     # Checking neighbors
             [status,new_node] = check_neighbors(cur_node,direction)
-            if status == True:
+            if status == True:                                                          # if valid, add the node
                 new_node[9] = parent
-                [nodes,node_set,exists] = AddNode(new_node,nodes,node_set)
-                if not exists:            
+                [nodes,node_set,visited] = AddNode(new_node,nodes,node_set)
+                if not visited:                                                         # if not visited, add node to the queue
                     queue.append(len(nodes)-1)
-            if new_node[0:9] == goal_node:
+            if new_node[0:9] == goal_node:                                              # Check goal, break if true
                 isgoal = True
                 break
-        if isgoal:
+        
+        if isgoal:                                                                      # Check if search is successful     
             success = True
             break
 
     return [success, nodes]
-
 
 
 def Initialize_puzzle():
@@ -353,6 +389,7 @@ def Initialize_puzzle():
     print_matrix(sample)
     print("\n In order to provide a user-defined state the user needs to enter the numbers of the state in a column-wise fashion.\n Example: For the above sample state, the input should be: 1 4 7 2 5 8 3 6 0\n")
     print("---------------------------------------")     
+    
     start_node = getInitialState()
     goal_node = getGoalState()
         
@@ -376,10 +413,11 @@ def Solve(start_node, goal_node):
 
     """
     [success, nodes] = BFS(start_node,goal_node)
-    if not success:
+    if not success:                                                                     # Checks if BFS was not successful
         print(" The puzzle could not be solved for the provided states. \n")
-
-    else:
+        
+    else:  
+        # Generate files                             
         nodePath = open("nodePath.txt","w+")
         Nodes = open("Nodes.txt","w+")
         NodesInfo = open("NodesInfo.txt","w+")
@@ -403,7 +441,7 @@ def Solve(start_node, goal_node):
         Nodes.close()
         NodesInfo.close()
         
-        plot_path()
+        plot_path()                                                                     # Print sequence of states from start to goal state.
             
 
 
